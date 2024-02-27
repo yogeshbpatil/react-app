@@ -1,17 +1,22 @@
-import ListGroup from "./components/ListGroup";
+import { useState } from "react";
+import Message from "./components/Message";
+
 function App() {
-  let items = ["New York", "San Francisco", "Tokyo", "London", "Paris"];
-  const handleSelectItem = (item: string) => {
-    console.log(item);
+  const [drink, setDrink] = useState({
+    title: "Americano",
+    price: 5,
+  });
+  const handleClick = () => {
+    const newDrink = { ...drink, price: 6 };
+    setDrink(newDrink);
   };
   return (
-    <div>
-      <ListGroup
-        items={items}
-        heading="Cities"
-        onSelectItem={handleSelectItem}
-      />
-    </div>
+    <>
+      {drink.price}
+      <div>
+        <button onClick={handleClick}>Click Me</button>
+      </div>
+    </>
   );
 }
 export default App;
