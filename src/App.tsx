@@ -1,17 +1,21 @@
-import ListGroup from "./components/ListGroup";
+import { useState } from "react";
+
 function App() {
-  let items = ["New York", "San Francisco", "Tokyo", "London", "Paris"];
-  const handleSelectItem = (item: string) => {
-    console.log(item);
+  const [tags, setTags] = useState(["happy", "cheerful"]);
+  const handleClick = () => {
+    //Add
+    setTags([...tags, "exciting"]);
+    //Remove
+    setTags(tags.filter((tags) => tags != "happy"));
+    //update
+    setTags(tags.map((tag) => (tag === "happy" ? "happiness" : tag)));
   };
   return (
-    <div>
-      <ListGroup
-        items={items}
-        heading="Cities"
-        onSelectItem={handleSelectItem}
-      />
-    </div>
+    <>
+      <div>
+        <button onClick={handleClick}>Click Me</button>
+      </div>
+    </>
   );
 }
 export default App;
