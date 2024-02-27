@@ -1,17 +1,25 @@
-import ListGroup from "./components/ListGroup";
+import { useState } from "react";
+
 function App() {
-  let items = ["New York", "San Francisco", "Tokyo", "London", "Paris"];
-  const handleSelectItem = (item: string) => {
-    console.log(item);
+  const [customer, setCustomer] = useState({
+    name: "Americano",
+    address: {
+      city: "San Francisco",
+      zipcode: 94111,
+    },
+  });
+  const handleClick = () => {
+    setCustomer({
+      ...customer,
+      address: { ...customer.address, zipcode: 94112 },
+    });
   };
   return (
-    <div>
-      <ListGroup
-        items={items}
-        heading="Cities"
-        onSelectItem={handleSelectItem}
-      />
-    </div>
+    <>
+      <div>
+        <button onClick={handleClick}>Click Me</button>
+      </div>
+    </>
   );
 }
 export default App;
