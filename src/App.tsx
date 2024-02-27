@@ -1,13 +1,9 @@
-import "./App.css";
-import { BsFillCalendarFill } from "react-icons/bs";
+import Message from "./components/Message";
+
 function App() {
-  let items = ["New York", "Los Angeles", "San Francisco"];
-  const handleSelectItem = (item: string) => {
-    console.log(item);
-  };
   return (
     <div>
-      <BsFillCalendarFill color="red" size={40} />
+      <Message />
     </div>
   );
 }
