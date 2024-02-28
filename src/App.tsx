@@ -1,16 +1,21 @@
-import ListGroup from "./components/ListGroup";
+import { useState } from "react";
+import ExpenseList from "./expense-tracker/components/ExpenseList";
+
 function App() {
-  let items = ["New York", "San Francisco", "Tokyo", "London", "Paris"];
-  const handleSelectItem = (item: string) => {
-    console.log(item);
-  };
+  const [expenses, setExpenses] = useState([
+    { id: 1, description: "aaa", amount: 10, category: "Utilities" },
+    { id: 2, description: "bbb", amount: 10, category: "Utilities" },
+    { id: 3, description: "ccc", amount: 10, category: "Utilities" },
+    { id: 4, description: "ddd", amount: 10, category: "Utilities" },
+  ]);
   return (
     <div>
-      <ListGroup
-        items={items}
-        heading="Cities"
-        onSelectItem={handleSelectItem}
-      />
+      <div>
+        <ExpenseList
+          expenses={expenses}
+          onDelete={(id) => setExpenses(expenses.filter((e) => e.id != id))}
+        />
+      </div>
     </div>
   );
 }
