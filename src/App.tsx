@@ -1,16 +1,19 @@
-import ListGroup from "./components/ListGroup";
+import { useState } from "react";
+import ProductList from "./components/ProductList";
+
 function App() {
-  let items = ["New York", "San Francisco", "Tokyo", "London", "Paris"];
-  const handleSelectItem = (item: string) => {
-    console.log(item);
-  };
+  const [category, setCategory] = useState("");
   return (
     <div>
-      <ListGroup
-        items={items}
-        heading="Cities"
-        onSelectItem={handleSelectItem}
-      />
+      <select
+        className="form-select"
+        onChange={(event) => setCategory(event.target.value)}
+      >
+        <option value=""></option>
+        <option value="Clothing">Clothing</option>
+        <option value="HouseHolds">HouseHolds</option>
+      </select>
+      <ProductList category={category} />
     </div>
   );
 }
