@@ -1,17 +1,40 @@
-import ListGroup from "./components/ListGroup";
+import axios, { AxiosError } from "axios";
+import { useEffect, useState } from "react";
+
+interface User {
+  id: number;
+  name: string;
+}
+
 function App() {
-  let items = ["New York", "San Francisco", "Tokyo", "London", "Paris"];
-  const handleSelectItem = (item: string) => {
-    console.log(item);
-  };
+  const [users, setUsers] = useState<User[]>([]);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await axios.get<User[]>(
+          "https://jsonplaceholder.typicode.com/users"
+        );
+        setUsers(res.data);
+      } catch (err) {
+        setError((err as AxiosError).message);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
   return (
-    <div>
-      <ListGroup
-        items={items}
-        heading="Cities"
-        onSelectItem={handleSelectItem}
-      />
-    </div>
+    <>
+      {error && <p className="text-danger">{error}</p>}
+      <ul>
+        {users.map((user) => (
+          <li key={user.id}>{user.name}</li>
+        ))}
+      </ul>
+    </>
   );
 }
+
 export default App;
