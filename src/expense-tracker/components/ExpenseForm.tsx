@@ -2,34 +2,45 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import categories from "../categories";
+
 const schema = z.object({
   description: z
     .string()
-    .min(3, { message: "Desscripton should be at least 3 characters" })
+    .min(3, { message: "Description should be at least 3 characters." })
     .max(50),
   amount: z
-    .number({ invalid_type_error: "Amout is must required" })
-    .min(0)
-    .max(100000),
+    .number({ invalid_type_error: "Amount is required." })
+    .min(0.01)
+    .max(100_000),
   category: z.enum(categories, {
-    errorMap: () => ({ message: "category is required" }),
+    errorMap: () => ({ message: "Category is required." }),
   }),
 });
-type ExpenseFromData = z.infer<typeof schema>;
+
+type ExpenseFormData = z.infer<typeof schema>;
+
 interface Props {
-  onSubmit: (data: ExpenseFromData) => void;
+  onSubmit: (data: ExpenseFormData) => void;
 }
+
 const ExpenseForm = ({ onSubmit }: Props) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
-  } = useForm<ExpenseFromData>({ resolver: zodResolver(schema) });
+  } = useForm<ExpenseFormData>({ resolver: zodResolver(schema) });
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form
+      onSubmit={handleSubmit((data) => {
+        onSubmit(data);
+        reset();
+      })}
+    >
       <div className="mb-3">
         <label htmlFor="description" className="form-label">
-          DesCription
+          Description
         </label>
         <input
           {...register("description")}
@@ -46,9 +57,9 @@ const ExpenseForm = ({ onSubmit }: Props) => {
           Amount
         </label>
         <input
-          {...register("amount")}
+          {...register("amount", { valueAsNumber: true })}
           id="amount"
-          type="text"
+          type="number"
           className="form-control"
         />
         {errors.amount && (
@@ -59,18 +70,17 @@ const ExpenseForm = ({ onSubmit }: Props) => {
         <label htmlFor="category" className="form-label">
           Category
         </label>
-        <select
-          {...register("category")}
-          name="category"
-          id="category"
-          className="form-slect"
-        >
+        <select {...register("category")} id="category" className="form-select">
+          <option value=""></option>
           {categories.map((category) => (
             <option key={category} value={category}>
               {category}
             </option>
           ))}
         </select>
+        {errors.category && (
+          <p className="text-danger">{errors.category.message}</p>
+        )}
       </div>
       <button className="btn btn-primary">Submit</button>
     </form>
