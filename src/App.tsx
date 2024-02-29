@@ -1,16 +1,16 @@
-import ListGroup from "./components/ListGroup";
+import { useEffect, useRef } from "react";
+
 function App() {
-  let items = ["New York", "San Francisco", "Tokyo", "London", "Paris"];
-  const handleSelectItem = (item: string) => {
-    console.log(item);
-  };
+  const ref = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (ref.current) ref.current.focus();
+  });
+  useEffect(() => {
+    document.title = "My App";
+  });
   return (
     <div>
-      <ListGroup
-        items={items}
-        heading="Cities"
-        onSelectItem={handleSelectItem}
-      />
+      <input ref={ref} type="text" className="form-control"></input>
     </div>
   );
 }
