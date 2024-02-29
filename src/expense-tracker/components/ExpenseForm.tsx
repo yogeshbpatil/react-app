@@ -9,21 +9,24 @@ const schema = z.object({
     .max(50),
   amount: z
     .number({ invalid_type_error: "Amout is must required" })
-    .min(0.01)
+    .min(0)
     .max(100000),
   category: z.enum(categories, {
     errorMap: () => ({ message: "category is required" }),
   }),
 });
 type ExpenseFromData = z.infer<typeof schema>;
-const ExpenseForm = () => {
+interface Props {
+  onSubmit: (data: ExpenseFromData) => void;
+}
+const ExpenseForm = ({ onSubmit }: Props) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<ExpenseFromData>({ resolver: zodResolver(schema) });
   return (
-    <form onSubmit={handleSubmit((data) => console.log("data"))}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="mb-3">
         <label htmlFor="description" className="form-label">
           DesCription
@@ -43,9 +46,9 @@ const ExpenseForm = () => {
           Amount
         </label>
         <input
-          {...(register("amount"), { valueAsNumer: true })}
+          {...register("amount")}
           id="amount"
-          type="number"
+          type="text"
           className="form-control"
         />
         {errors.amount && (
