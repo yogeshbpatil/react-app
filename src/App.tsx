@@ -1,17 +1,22 @@
-import ListGroup from "./components/ListGroup";
+import axios from "axios";
+import { useEffect, useState } from "react";
+interface User {
+  id: number;
+  name: string;
+}
 function App() {
-  let items = ["New York", "San Francisco", "Tokyo", "London", "Paris"];
-  const handleSelectItem = (item: string) => {
-    console.log(item);
-  };
+  const [user, setusers] = useState<User[]>([]);
+  useEffect(() => {
+    axios
+      .get<User[]>("https://jsonplaceholder.typicode.com/users")
+      .then((res) => setusers(res.data));
+  }, []);
   return (
-    <div>
-      <ListGroup
-        items={items}
-        heading="Cities"
-        onSelectItem={handleSelectItem}
-      />
-    </div>
+    <ul>
+      {user.map((user) => (
+        <li key={user.id}>{user.name}</li>
+      ))}
+    </ul>
   );
 }
 export default App;
